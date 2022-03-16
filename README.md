@@ -1,0 +1,2 @@
+# SerialImgDownloader
+webページから画像を一括ダウンロードし、それらを連番でリネームする
