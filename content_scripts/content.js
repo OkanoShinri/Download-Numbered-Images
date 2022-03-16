@@ -82,19 +82,24 @@
     let img_srcs = new Array();
 
     for (var i = 0; i < imgs.length; i++) {
-      let href_ = imgs[i].getAttribute("href");
-      if (href_ === null) {
+      let src_ = imgs[i].getAttribute("src");
+      if (src_ === null) {
         continue;
       }
 
-      if (
-        href_.includes("png") ||
-        href_.includes("jpeg") ||
-        href_.includes("jpg")
-      ) {
-        let src = RelUrlToAbsUrl(imgs[i].getAttribute("src"));
-        console.log(src);
-        img_srcs.push(src);
+      if (isImage(src_)) {
+        let ref = RelUrlToAbsUrl(src_);
+        let file_name = "";
+        if (message.is_serialized) {
+          file_name = String(index) + "." + getExtension(ref);
+        } else {
+          let splited = ref.split("/");
+          file_name = splited.slice(-1)[0];
+        }
+        notifyDownloadToBackground(ref, file_name);
+        console.log(ref);
+        img_refs.push(ref);
+        index++;
       }
     }
     if (img_srcs.length === 0) {
