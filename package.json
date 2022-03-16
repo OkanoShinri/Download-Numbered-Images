@@ -1,11 +1,11 @@
 {
   "name": "easy-downloader",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "webページから画像を一括ダウンロードし、それらを連番でリネームするFirefoxアドオンです。\r 事実上PixivFANBOX用です。",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "web-ext build"
+    "build": "web-ext build --overwrite-dest"
   },
   "repository": {
     "type": "git",
