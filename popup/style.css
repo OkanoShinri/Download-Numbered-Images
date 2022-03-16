@@ -1,16 +1,46 @@
 html,
 body {
-  width: 300px;
+  width: 250px;
 }
 
 .hidden {
   display: none;
 }
 
-.button {
-  margin: 3% auto;
-  padding: 4px;
+.main {
+  margin:0 auto;
   text-align: center;
-  font-size: 1.5em;
-  cursor: pointer;
+}
+.checkbox {
+  user-select: none;
+  margin: 10px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.button {
+  display: block;
+  margin:0 auto;
+}
+
+.button a {
+  display: block;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  padding: 1em 2em;
+  width: 130px;
+  color: #333;
+  font-size: 18px;
+  font-weight: 700;
+  background-color: #bbbbbb;
+  box-shadow: 0 0 10px rgba(0 0 0 / 0.2);
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.button a:hover {
+  text-decoration: none;
+  background-color: #aaaaaa;
+  box-shadow: 0 0 10px rgba(0 0 0 / 0);
 }
