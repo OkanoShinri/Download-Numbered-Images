@@ -1,4 +1,4 @@
 # EasyDownloader
 
-webページから画像を一括ダウンロードし、それらを連番でリネームするFirefoxアドオンです。
-事実上PixivFANBOX用です。
+web ページから画像を一括ダウンロードし、それらを連番でリネームする Firefox アドオンです。
+事実上 PixivFANBOX 用です。

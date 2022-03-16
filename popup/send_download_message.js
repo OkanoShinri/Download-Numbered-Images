@@ -1,6 +1,5 @@
 function listenForClicks() {
   document.addEventListener("click", (e) => {
-
     function notifyDownloadToContent(tabs) {
       let is_serialized = document.getElementById("serialize_check").checked;
       browser.tabs.sendMessage(tabs[0].id, {

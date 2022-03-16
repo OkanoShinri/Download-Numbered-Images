@@ -45,11 +45,6 @@
   }
 
   browser.runtime.onMessage.addListener((message) => {
-    if (message.command === "download") {
-      console.log("ダウンロードコマンドがタブに到達しました。");
-      //downloadImg();
-    }
-
     let index = 0;
 
     //<a>を検索
@@ -100,7 +95,6 @@
         let src = RelUrlToAbsUrl(imgs[i].getAttribute("src"));
         console.log(src);
         img_srcs.push(src);
-        //downloadImg(src, "hoge");
       }
     }
     if (img_srcs.length === 0) {
@@ -109,12 +103,5 @@
     console.log("終了");
     console.log(img_refs);
     console.log(img_srcs);
-    /*
-      let xhr = new XMLHttpRequest();
-      xhr.open('GET', src, true);
-      xhr.responseType = "blob";
-      xhr.onload = downloadImageToLocal;
-      xhr.send();
-      */
   });
 })();
