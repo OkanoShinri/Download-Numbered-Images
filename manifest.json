@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+  "name": "EasyDownloader",
+  "version": "1.0",
+
+  "description": "Simple download tool.",
+  "homepage_url": "https://github.com/OkanoShinri/EasyDownloader",
+  "icons": {
+    "48": "icons/48.png"
+  },
+
+  "permissions": ["activeTab", "downloads", "downloads.open", "notifications"],
+
+  "browser_action": {
+    "default_icon": "icons/32.png",
+    "default_title": "EasyDownloader",
+    "default_popup": "popup/popup.html"
+  },
+
+  "background": {
+    "scripts": ["background-scripts/background.js"]
+  }
+}
