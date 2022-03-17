@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Option</title>
+  </head>
+  <body>
+    <h1>オプション</h1>
+    <div id="option-content" class="main">
+      <label for="serialize_check">
+        <input type="checkbox" id="serialize_check" checked />
+        <span>画像を連番化する</span></label
+      ><br />
+      <label for="only_main_images">
+        <input type="checkbox" id="only_main_images" checked />
+        <span>メインコンテンツ以外(プロフィール画像など)を除外する</span></label
+      >
+      <h2>除外ワード</h2>
+      <p>urlに次のワードが含まれる場合、その画像は保存しません</p>
+      <textarea id="ng_words" rows="6" cols="30"></textarea>
+      <h2>ダウンロードフォルダ</h2>
+      <p>
+        デフォルトのダウンロードフォルダからの相対パスで記述してください。<br />
+        {title}でページタイトルと同じ名前のフォルダを生成します。
+      </p>
+      <textarea cols="30" rows="1" id="download_folder"></textarea>
+    </div>
+    <script src="options.js"></script>
+  </body>
+</html>

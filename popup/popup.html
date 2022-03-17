@@ -15,14 +15,22 @@
         <label for="serialize_check">
           <input type="checkbox" id="serialize_check" checked />
           <span>画像を連番化する</span></label
+        ><br />
+        <label for="only_main_images">
+          <input type="checkbox" id="only_main_images" checked />
+          <span
+            >メインコンテンツ以外(プロフィール画像など)を除外する</span
+          ></label
         >
       </div>
-      <div class="button">Download</div>
+      <div id="download-button" class="button">Download</div>
+      <div id="error-content" class="hidden">
+        <p>このページではダウンロードできません…</p>
+      </div>
+      <div class="option">オプション</div>
     </div>
-    <div id="error-content" class="hidden">
-      <p>Can't beastify this web page.</p>
-      <p>Try a different page.</p>
-    </div>
+
+    <script src="popup.js"></script>
     <script src="send_download_message.js"></script>
   </body>
 </html>

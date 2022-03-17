@@ -1,0 +1,9 @@
+html,
+body {
+  height: 500px;
+  margin: 10px;
+}
+
+textarea {
+  resize: horizontal;
+}

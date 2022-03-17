@@ -29,3 +29,12 @@ body {
   font-size: 24px;
   font-weight: 1000;
 }
+
+.option {
+  margin: 10px auto;
+  padding: 4px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 700;
+}

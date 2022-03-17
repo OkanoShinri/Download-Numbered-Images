@@ -2,9 +2,12 @@ function listenForClicks() {
   document.addEventListener("click", (e) => {
     function notifyDownloadToContent(tabs) {
       let is_serialized = document.getElementById("serialize_check").checked;
+      let is_only_main_images =
+        document.getElementById("only_main_images").checked;
       browser.tabs.sendMessage(tabs[0].id, {
         command: "download",
         is_serialized: is_serialized,
+        is_only_main_images: is_only_main_images,
       });
     }
 
@@ -18,13 +21,16 @@ function listenForClicks() {
         .then(notifyDownloadToContent)
         .catch(reportError);
     }
+    if (e.target.classList.contains("option")) {
+      browser.runtime.openOptionsPage();
+    }
   });
 }
 
 function reportExecuteScriptError(error) {
-  document.querySelector("#popup-content").classList.add("hidden");
-  document.querySelector("#error-content").classList.remove("hidden");
-  console.error(`Failed to download: ${error.message}`);
+  document.getElementById("download-button").classList.add("hidden");
+  document.getElementById("error-content").classList.remove("hidden");
+  console.error(`Failed : ${error.message}`);
 }
 
 browser.tabs
