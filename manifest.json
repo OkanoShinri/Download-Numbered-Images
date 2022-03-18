@@ -1,19 +1,25 @@
 {
   "manifest_version": 2,
-  "name": "EasyDownloader",
-  "version": "1.0.4",
+  "name": "EasyImgDownloader",
+  "version": "1.0.5",
 
   "description": "Simple download tool.",
-  "homepage_url": "https://github.com/OkanoShinri/EasyDownloader",
+  "homepage_url": "https://github.com/OkanoShinri/EasyImgDownloader",
   "icons": {
     "48": "icons/48.png"
   },
 
-  "permissions": ["activeTab", "downloads", "storage", "notifications"],
-
+  "permissions": [
+    "<all_urls>",
+    "activeTab",
+    "downloads",
+    "storage",
+    "notifications",
+    "menus"
+  ],
   "browser_action": {
     "default_icon": "icons/32.png",
-    "default_title": "EasyDownloader",
+    "default_title": "EasyImgDownloader",
     "default_popup": "popup/popup.html"
   },
   "options_ui": {
