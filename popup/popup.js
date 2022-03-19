@@ -3,10 +3,10 @@
 //popup.htmlの内容をストレージにセットする
 function storeSettings() {
   let is_serialized = document.getElementById("serialize_check").checked;
-  let is_only_main_images = document.getElementById("only_main_images").checked;
+  let rm_ngwords = document.getElementById("only_main_images").checked;
   browser.storage.local.set({
     is_serialized: is_serialized,
-    is_only_main_images: is_only_main_images,
+    rm_ngwords: rm_ngwords,
   });
 }
 
@@ -17,7 +17,7 @@ browser.storage.local
     document.getElementById("serialize_check").checked =
       restoredSettings.is_serialized;
     document.getElementById("only_main_images").checked =
-      restoredSettings.is_only_main_images;
+      restoredSettings.rm_ngwords;
   })
   .catch((e) => {
     console.error(`Failed : ${e.message}`);

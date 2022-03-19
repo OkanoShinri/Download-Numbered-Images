@@ -1,15 +1,33 @@
+var img_extentions = [""];
+var ng_words = [""];
+var download_folder = "";
+
+//ポップアップメニューが開かれたとき、設定をストレージから読み取る
+browser.storage.local
+  .get()
+  .then((restoredSettings) => {
+    img_extentions = restoredSettings.img_extentions;
+    ng_words = restoredSettings.ng_words;
+    download_folder = restoredSettings.download_folder;
+  })
+  .catch((e) => {
+    console.error("Failed :" + error.message);
+  });
+
 function listenForClicks() {
   document.addEventListener("click", (e) => {
     //content.jsにダウンロードコマンドを送る関数
     function notifyDownloadToContent(tabs) {
       let is_serialized = document.getElementById("serialize_check").checked;
-      let is_only_main_images =
-        document.getElementById("only_main_images").checked;
+      let rm_ngwords = document.getElementById("only_main_images").checked;
       if (tabs[0].status === "complete") {
         browser.tabs.sendMessage(tabs[0].id, {
           command: "download",
           is_serialized: is_serialized,
-          is_only_main_images: is_only_main_images,
+          img_extentions: img_extentions,
+          rm_ngwords: rm_ngwords,
+          ng_words: ng_words,
+          download_folder: download_folder,
         });
       } else {
         //ページの読み込みが終わっていなかった場合、少し待って再度実行
@@ -23,7 +41,7 @@ function listenForClicks() {
         .query({ active: true, currentWindow: true })
         .then(notifyDownloadToContent)
         .catch((error) => {
-          console.error("Could not download: ${error}");
+          console.error("Could not download:" + error.message);
         });
     }
     if (e.target.classList.contains("option")) {
@@ -43,5 +61,5 @@ browser.tabs
     //ポップアップメニューのダウンロードボタンをエラーメッセージに変更する
     document.getElementById("download-button").classList.add("hidden");
     document.getElementById("error-content").classList.remove("hidden");
-    console.error("Failed : ${error.message}");
+    console.error("Failed :" + error.message);
   });

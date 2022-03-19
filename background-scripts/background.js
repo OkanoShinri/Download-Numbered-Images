@@ -1,17 +1,20 @@
 browser.runtime.onMessage.addListener(catchMessage);
 
 //storage.localの設定
-var ng_words = ["profile", "thumb", "hash", "240x240", "semantic_core_img"];
+let is_serialized = true;
+let rm_ngwords = true;
+let img_extentions = ["png", "jpeg", "jpg", "gif", "svg"];
+let ng_words = ["profile", "hash", "240x240", "semantic_core_img"];
+let download_folder = "DownloadNumberedImages/{title}";
 
-//面倒なのでグローバル変数
-var is_serialized = true;
-var is_only_main_images = true;
+//アドオンがインストールされたときに実行（初期化）
 browser.runtime.onInstalled.addListener((details) => {
   browser.storage.local.set({
     is_serialized: is_serialized,
-    is_only_main_images: is_only_main_images,
+    rm_ngwords: rm_ngwords,
+    img_extentions: img_extentions,
     ng_words: ng_words,
-    download_folder: "EasyImgDownloader/{title}",
+    download_folder: download_folder,
   });
 });
 
@@ -29,7 +32,10 @@ browser.menus.onShown.addListener((info) => {
     .get()
     .then((restoredSettings) => {
       is_serialized = restoredSettings.is_serialized;
-      is_only_main_images = restoredSettings.is_only_main_images;
+      rm_ngwords = restoredSettings.rm_ngwords;
+      img_extentions = restoredSettings.img_extentions;
+      ng_words = restoredSettings.ng_words;
+      download_folder = restoredSettings.download_folder;
     })
     .catch((e) => {
       console.error(`Failed : ${e.message}`);
@@ -51,7 +57,10 @@ browser.menus.onClicked.addListener((info, tab) => {
       browser.tabs.sendMessage(tab.id, {
         command: "download",
         is_serialized: is_serialized,
-        is_only_main_images: is_only_main_images,
+        rm_ngwords: rm_ngwords,
+        img_extentions: img_extentions,
+        ng_words: ng_words,
+        download_folder: download_folder,
       });
     } else {
       setTimeout(notifyDownloadToContent, 100);

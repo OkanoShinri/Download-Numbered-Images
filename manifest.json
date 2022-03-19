@@ -1,12 +1,13 @@
 {
   "manifest_version": 2,
-  "name": "EasyImgDownloader",
-  "version": "1.0.5",
+  "name": "連番ダウンローダー: Download numbered images",
+  "version": "1.1.0",
 
-  "description": "Simple download tool.",
-  "homepage_url": "https://github.com/OkanoShinri/EasyImgDownloader",
+  "description": "Download sequentially numbered images in batches.",
+  "homepage_url": "https://github.com/OkanoShinri/Download-Numbered-Images",
   "icons": {
-    "48": "icons/48.png"
+    "48": "icons/48.png",
+    "96": "icons/96.png"
   },
 
   "permissions": [
@@ -19,7 +20,7 @@
   ],
   "browser_action": {
     "default_icon": "icons/32.png",
-    "default_title": "EasyImgDownloader",
+    "default_title": "連番ダウンローダー: Download numbered images",
     "default_popup": "popup/popup.html"
   },
   "options_ui": {

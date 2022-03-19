@@ -3,7 +3,12 @@
 // option.htmlの内容をストレージにセットする
 function storeSettings() {
   let is_serialized = document.getElementById("serialize_check").checked;
-  let is_only_main_images = document.getElementById("only_main_images").checked;
+  let rm_ngwords = document.getElementById("only_main_images").checked;
+  let img_extentions = document
+    .getElementById("img_extentions")
+    .value.split(" ")
+    .join("")
+    .split(",");
   let ng_words_ = document.getElementById("ng_words").value.split("\n");
   let ng_words = [];
   for (var i = 0; i < ng_words_.length; ++i) {
@@ -12,7 +17,8 @@ function storeSettings() {
   let download_folder = document.getElementById("download_folder").value;
   browser.storage.local.set({
     is_serialized: is_serialized,
-    is_only_main_images: is_only_main_images,
+    rm_ngwords: rm_ngwords,
+    img_extentions: img_extentions,
     ng_words: ng_words,
     download_folder: download_folder,
   });
@@ -25,7 +31,9 @@ browser.storage.local
     document.getElementById("serialize_check").checked =
       restoredSettings.is_serialized;
     document.getElementById("only_main_images").checked =
-      restoredSettings.is_only_main_images;
+      restoredSettings.rm_ngwords;
+    document.getElementById("img_extentions").value =
+      restoredSettings.img_extentions.join(",");
     document.getElementById("ng_words").value =
       restoredSettings.ng_words.join("\n");
     document.getElementById("download_folder").value =
@@ -41,6 +49,9 @@ document
   .addEventListener("change", storeSettings);
 document
   .getElementById("only_main_images")
+  .addEventListener("change", storeSettings);
+document
+  .getElementById("img_extentions")
   .addEventListener("change", storeSettings);
 document.getElementById("ng_words").addEventListener("change", storeSettings);
 document

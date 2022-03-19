@@ -1,6 +1,6 @@
-# EasyImgDownloader
+# 連番ダウンローダー: Download numbered images
 
-[https://addons.mozilla.org/ja/firefox/addon/easy-img-downloader/](https://addons.mozilla.org/ja/firefox/addon/easy-img-downloader/)
+[https://addons.mozilla.org/ja/firefox/addon/download-numbered-images/](https://addons.mozilla.org/ja/firefox/addon/download-numbered-images/)
 
 web ページから画像を一括ダウンロードし、それらを連番でリネームする Firefox アドオンです。  
 PixivFANBOXとかでファイル名がランダムな英数字になっているのを修正し続ける作業に疲れたので作りました。  
@@ -13,10 +13,6 @@ PixivFANBOXとかでファイル名がランダムな英数字になっている
 - 画像の名前を `0.png,1.png,...`のように連番で保存することができます。
 - Twitterの画像は原寸大のものに変換して保存します。
 
-## スクショ
+![https://i.imgur.com/XdLjwdn](https://i.imgur.com/XdLjwdnl.gif)
 
-![https://i.imgur.com/kdYZkEa](https://i.imgur.com/kdYZkEal.png)
-
-![https://i.imgur.com/7TJKRnL](https://i.imgur.com/7TJKRnLl.png)
-
-![https://i.imgur.com/LBnPZCw](https://i.imgur.com/LBnPZCw.png) ![https://i.imgur.com/at7rWdh](https://i.imgur.com/at7rWdh.png)
+![https://imgur.com/B0vR9XC](https://i.imgur.com/B0vR9XCl.png)

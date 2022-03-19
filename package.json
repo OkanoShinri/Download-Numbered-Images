@@ -1,24 +1,24 @@
 {
-  "name": "easy-downloader",
-  "version": "1.0.5",
+  "name": "download-numbered-images",
+  "version": "1.1.0",
   "description": "webページから画像を一括ダウンロードし、それらを連番でリネームするFirefoxアドオンです。\r 事実上PixivFANBOX用です。",
   "main": "manifest.json",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "web-ext build --overwrite-dest",
-    "run": "web-ext run"
+    "run": "web-ext run",
+    "lint": "web-ext lint "
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OkanoShinri/EasyDownloader.git"
+    "url": "git+https://github.com/OkanoShinri/Download-Numbered-Images.git"
   },
   "author": "OkanoShinri",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/OkanoShinri/EasyDownloader/issues"
+    "url": "https://github.com/OkanoShinri/Download-Numbered-Images/issues"
   },
-  "homepage": "https://github.com/OkanoShinri/EasyDownloader#readme",
+  "homepage": "https://github.com/OkanoShinri/Download-Numbered-Images#readme",
   "devDependencies": {
-    "web-ext": "^5.1.0"
+    "web-ext": "^6.7.0"
   }
 }
