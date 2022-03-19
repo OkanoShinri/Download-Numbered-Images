@@ -93,6 +93,7 @@
         removeProgressBar();
       });
     }
+    /**/
   });
 
   //指定されたタグを含むエレメントをリストにして返す
@@ -141,7 +142,6 @@
         urls.push("");
       } else {
         let url = extractUrlFromAttribute(attribute, value);
-        url = relUrlToAbsUrl(url);
         urls.push(url);
       }
     }
@@ -267,12 +267,13 @@
 
         if (
           url === "" ||
+          url.includes("logout") || //logoutリンクを踏んでしまうとその場でアウト
           (message.rm_ngwords && includeNgWords(url, message))
         ) {
           let current = Number(progress_bar.value) + step;
           progress_bar.value = String(current);
           elements[index].style.outline = "";
-          return false;
+          return extention;
         }
 
         //URLに拡張子を含む場合、それで判定
@@ -332,25 +333,37 @@
   function extractUrlFromAttribute(attribute, value) {
     switch (attribute) {
       case "href":
-        return value;
+        var url = relUrlToAbsUrl(value);
+        if (url.includes("http")) {
+          return url;
+        }
+        break;
       case "src":
-        return value;
+        var url = relUrlToAbsUrl(value);
+        if (url.includes("http")) {
+          return url;
+        }
+        break;
       case "style":
         if (value.includes("background-image")) {
           let background_image = value.match(/url\(.+?\)/g);
           if (background_image !== null) {
-            let url = background_image[0]
+            var url = background_image[0]
               .split(" ")
               .join("")
               .slice(5)
               .slice(0, -2); //.slice(4).slice(0, -1);でないのは、両端の"を除くため
-            return url;
+            url = relUrlToAbsUrl(url);
+            if (url.includes("http")) {
+              return url;
+            }
           }
         }
-        return "";
+        break;
       default:
         return "";
     }
+    return "";
   }
 
   //相対パスを絶対パスに変換する
