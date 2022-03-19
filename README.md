@@ -13,6 +13,4 @@ PixivFANBOXとかでファイル名がランダムな英数字になっている
 - 画像の名前を `0.png,1.png,...`のように連番で保存することができます。
 - Twitterの画像は原寸大のものに変換して保存します。
 
-![https://i.imgur.com/XdLjwdn](https://i.imgur.com/XdLjwdnl.gif)
-
-![https://imgur.com/B0vR9XC](https://i.imgur.com/B0vR9XCl.png)
+![demo](https://user-images.githubusercontent.com/72956592/159126758-953958e5-72b7-4152-a050-eec3b884dd5b.gif)
