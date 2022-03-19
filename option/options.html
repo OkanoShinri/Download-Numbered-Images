@@ -10,22 +10,31 @@
     <h1>オプション</h1>
     <div id="option-content" class="main">
       <label for="serialize_check">
-        <input type="checkbox" id="serialize_check" checked />
-        <span>画像を連番化する</span></label
-      ><br />
-      <label for="only_main_images">
-        <input type="checkbox" id="only_main_images" checked />
-        <span>メインコンテンツ以外(プロフィール画像など)を除外する</span></label
+        <div>
+          <input type="checkbox" id="serialize_check" checked />
+          画像を連番化する<br />
+          画像の名前に自動的に番号を振ります。オフにするとオリジナルの名前のまま保存する代わりに、実行速度が上昇します。
+        </div></label
       >
+      <br />
+      <label for="only_main_images">
+        <div>
+          <input type="checkbox" id="only_main_images" checked />
+          メインコンテンツ以外を除外する<br />下の除外ワードを含む画像をダウンロードしなくなります。
+        </div></label
+      >
+
+      <h2>除外ワード</h2>
+      <p>urlに次のワードが含まれる場合、その画像は保存しません</p>
+      <textarea id="ng_words" rows="6" cols="30"></textarea>
+      
       <h2>画像拡張子</h2>
       <p>
         次の拡張子の画像を保存します。ピリオド（ドット）は付けずに、複数並べるときはカンマで区切ってください。<br />
         png, jpeg, jpg, gif, svgが指定できます。
       </p>
       <textarea cols="30" rows="1" id="img_extentions"></textarea>
-      <h2>除外ワード</h2>
-      <p>urlに次のワードが含まれる場合、その画像は保存しません</p>
-      <textarea id="ng_words" rows="6" cols="30"></textarea>
+      
       <h2>ダウンロードフォルダ</h2>
       <p>
         デフォルトのダウンロードフォルダからの相対パスで記述してください。<br />

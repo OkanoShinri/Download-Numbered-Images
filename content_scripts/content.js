@@ -60,28 +60,39 @@
       }
     }
 
-    getValidUrls(urls, elements, message).then((result) => {
-      //resultはこんな型
-      //[["url0", "jpg", element_0],["url1", "png", element_1],["url2", "jpg", element_2]]
+    if (message.is_serialized) {
+      getValidUrls(urls, elements, message).then((result) => {
+        //resultはこんな型
+        //[["url0", "jpg", element_0],["url1", "png", element_1],["url2", "jpg", element_2]]
 
-      for (let i = 0; i < result.length; i++) {
-        let url = result[i][0];
-        let extention = result[i][1];
-        let element = result[i][2];
-        download(url, extention, index, element, message);
+        for (let i = 0; i < result.length; i++) {
+          let url = result[i][0];
+          let extention = result[i][1];
+          let element = result[i][2];
+          download(url, extention, index, element, message);
+          index++;
+        }
+        if (index === 0) {
+          browser.runtime.sendMessage({
+            command: "no_img_notice",
+          });
+        }
 
-        index++;
-      }
+        console.log("終了");
+        removeProgressBar();
+      });
+    } else {
+      downloadValidUrls(urls, elements, message).then((download_num) => {
+        if (download_num === 0) {
+          browser.runtime.sendMessage({
+            command: "no_img_notice",
+          });
+        }
 
-      if (index === 0) {
-        browser.runtime.sendMessage({
-          command: "no_img_notice",
-        });
-      }
-
-      console.log("終了");
-      removeProgressBar();
-    });
+        console.log("終了");
+        removeProgressBar();
+      });
+    }
   });
 
   //指定されたタグを含むエレメントをリストにして返す
@@ -140,6 +151,104 @@
   }
 
   //渡されたurlのうち、画像を示すものを返す
+  async function downloadValidUrls(urls, elements, message) {
+    let download_list = new Array();
+    const result = await Promise.all(
+      urls.map(async (url, index, all) => {
+        //urlが画像のもので、NGワードを含まなければその拡張子を返す
+        //そうでないなら空文字を返す
+        let extention = "";
+        let step = 100 / all.length;
+        let progress_bar = document.getElementById(
+          "EasyImgDownloader-ProgressBar"
+        );
+
+        //探索前に
+        elements[index].style.outline = "2px dashed green";
+
+        if (
+          url === "" ||
+          (message.rm_ngwords && includeNgWords(url, message))
+        ) {
+          let current = Number(progress_bar.value) + step;
+          progress_bar.value = String(current);
+          elements[index].style.outline = "";
+          return false;
+        }
+
+        //URLに拡張子を含む場合、それで判定
+        for (let i = 0; i < img_extentions.length; i++) {
+          if (
+            url.includes("." + img_extentions[i]) ||
+            url.includes("=" + img_extentions[i])
+          ) {
+            if (!message.img_extentions.includes(img_extentions[i])) {
+              //httpチェックに回す
+              break;
+            }
+            //OK
+            let current = Number(progress_bar.value) + step;
+            progress_bar.value = String(current);
+            elements[index].style.outline = "2px dashed blue";
+            extention = img_extentions[i];
+            download_list.push(url);
+            download(
+              url,
+              extention,
+              download_list.length,
+              elements[index],
+              message
+            );
+            return true;
+          }
+        }
+
+        const fetch_result = await fetch(url).catch(() => new Response());
+        let content_type = fetch_result.headers.get("Content-Type");
+        for (let i = 0; i < img_content_type.length; i++) {
+          if (img_content_type[i] === content_type) {
+            //urlは画像のもの
+
+            //拡張子はオプションで設定できる
+            //その拡張子がOKか確認
+            if (!message.img_extentions.includes(img_extentions[i])) {
+              continue;
+            }
+            //OK
+            let current = Number(progress_bar.value) + step;
+            progress_bar.value = String(current);
+            elements[index].style.outline = "2px dashed blue";
+            extention = img_extentions[i];
+            download_list.push(url);
+            download(
+              url,
+              extention,
+              download_list.length,
+              elements[index],
+              message
+            );
+            return true;
+          }
+        }
+        //無かった
+        let current = Number(progress_bar.value) + step;
+        progress_bar.value = String(current);
+        elements[index].style.outline = "";
+        return false;
+      })
+    );
+
+    let download_num = 0;
+    for (let i = 0; i < result.length; i++) {
+      if (result[i]) {
+        download_num++;
+      }
+    }
+
+    return download_num;
+  }
+
+  //渡されたurlのうち、画像を示すものを返す
   async function getValidUrls(urls, elements, message) {
     let result = new Array();
     //const extentions = await Promise.all(urls.map(isValid));
@@ -156,21 +265,33 @@
         //探索前に
         elements[index].style.outline = "2px dashed green";
 
-        if (url === "") {
+        if (
+          url === "" ||
+          (message.rm_ngwords && includeNgWords(url, message))
+        ) {
           let current = Number(progress_bar.value) + step;
           progress_bar.value = String(current);
           elements[index].style.outline = "";
-          return extention;
+          return false;
         }
 
-        //test
-        /*
-        var test_url=""
-        var fetch_result = await fetch(test_url).catch(() => new Response());
-        var content_type = fetch_result.headers.get("Content-Type");
-        console.log(content_type);
-        */
-        //-test
+        //URLに拡張子を含む場合、それで判定
+        for (let i = 0; i < img_extentions.length; i++) {
+          if (
+            url.includes("." + img_extentions[i]) ||
+            url.includes("=" + img_extentions[i])
+          ) {
+            if (!message.img_extentions.includes(img_extentions[i])) {
+              break;
+            }
+            //OK
+            let current = Number(progress_bar.value) + step;
+            progress_bar.value = String(current);
+            elements[index].style.outline = "2px dashed blue";
+            extention = img_extentions[i];
+            return extention;
+          }
+        }
 
         const fetch_result = await fetch(url).catch(() => new Response());
         let content_type = fetch_result.headers.get("Content-Type");
@@ -183,11 +304,8 @@
             if (!message.img_extentions.includes(img_extentions[i])) {
               continue;
             }
-
-            if (!message.rm_ngwords || !includeNgWords(url, message)) {
-              elements[index].style.outline = "2px dashed blue";
-              extention = img_extentions[i];
-            }
+            elements[index].style.outline = "2px dashed blue";
+            extention = img_extentions[i];
             break;
           }
         }
