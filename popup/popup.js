@@ -30,3 +30,6 @@ document
 document
   .getElementById("only_main_images")
   .addEventListener("change", storeSettings);
+document.getElementById("option_button").addEventListener("click", (e) => {
+  browser.runtime.openOptionsPage();
+});

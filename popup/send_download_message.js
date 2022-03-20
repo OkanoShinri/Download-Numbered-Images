@@ -44,10 +44,6 @@ function listenForClicks() {
           console.error("Could not download:" + error.message);
         });
     }
-    if (e.target.classList.contains("option")) {
-      //オプションボタンがクリックされたとき、オプションメニューを開く
-      browser.runtime.openOptionsPage();
-    }
   });
 }
 
@@ -59,7 +55,7 @@ browser.tabs
   .catch((error) => {
     //開いているページでcontent.jsを実行できなかった場合、
     //ポップアップメニューのダウンロードボタンをエラーメッセージに変更する
-    document.getElementById("download-button").classList.add("hidden");
-    document.getElementById("error-content").classList.remove("hidden");
+    document.getElementById("download_button").classList.add("hidden");
+    document.getElementById("error_content").classList.remove("hidden");
     console.error("Failed :" + error.message);
   });

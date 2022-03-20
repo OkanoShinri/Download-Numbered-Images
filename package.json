@@ -1,7 +1,7 @@
 {
   "name": "download-numbered-images",
-  "version": "1.1.2",
-  "description": "webページから画像を一括ダウンロードし、それらを連番でリネームするFirefoxアドオンです。\r 事実上PixivFANBOX用です。",
+  "version": "1.1.5",
+  "description": "An extension that downloads a batch of images from a website and numbers them consecutively.",
   "main": "manifest.json",
   "scripts": {
     "build": "web-ext build --overwrite-dest",

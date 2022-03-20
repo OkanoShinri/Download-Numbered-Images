@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
   "name": "連番ダウンローダー: Download numbered images",
-  "version": "1.1.2",
+  "version": "1.1.5",
 
-  "description": "Download sequentially numbered images in batches.",
+  "description": "An extension that downloads a batch of images from a website and numbers them consecutively.",
   "homepage_url": "https://github.com/OkanoShinri/Download-Numbered-Images",
   "icons": {
     "48": "icons/48.png",
