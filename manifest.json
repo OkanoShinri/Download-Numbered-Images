@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "連番ダウンローダー: Download numbered images",
-  "version": "1.1.5",
+  "version": "1.2.0",
 
   "description": "An extension that downloads a batch of images from a website and numbers them consecutively.",
   "homepage_url": "https://github.com/OkanoShinri/Download-Numbered-Images",
@@ -12,21 +12,28 @@
 
   "permissions": [
     "<all_urls>",
+    "tabs",
     "activeTab",
     "downloads",
     "storage",
     "notifications",
     "menus"
   ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content_scripts/send_selection.js"]
+    }
+  ],
   "browser_action": {
     "default_icon": "icons/32.png",
     "default_title": "連番ダウンローダー: Download numbered images",
-    "default_popup": "popup/popup.html"
+    "default_popup": "src/popup/popup.html"
   },
   "options_ui": {
-    "page": "option/options.html"
+    "page": "src/option/options.html"
   },
   "background": {
-    "scripts": ["background-scripts/background.js"]
+    "scripts": ["src/background-scripts/background.js"]
   }
 }

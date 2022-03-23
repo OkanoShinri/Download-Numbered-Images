@@ -1,6 +1,6 @@
 html,
 body {
-  width: 200px;
+  width: 250px;
 }
 
 .hidden {
@@ -9,7 +9,6 @@ body {
 
 .main {
   margin: 0 auto;
-  text-align: center;
 }
 
 .checkbox {

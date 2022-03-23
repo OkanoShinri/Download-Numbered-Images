@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Option</title>
+  </head>
+  <body>
+    <h1>オプション</h1>
+    <div id="option-content" class="main">
+      <div class="body_text">
+        <label for="serialize_check">
+          <div>
+            <input type="checkbox" id="serialize_check" checked />
+            画像を連番化する<br />
+            画像の名前に自動的に番号を振ります。オフにするとオリジナルの名前のまま保存する代わりに、実行速度が上昇します。
+          </div></label
+        >
+        <br />
+        <label for="rm_ngwords">
+          <div>
+            <input type="checkbox" id="rm_ngwords" checked />
+            無関係な画像を除外する<br />下の除外ワードを含む画像をダウンロードしなくなります。
+          </div></label
+        >
+        <br />
+        <label for="download_all">
+          <div>
+            <input type="checkbox" id="download_all" />
+            強化探索<br />背景、dataURL画像を含めて、ページ内の全ての画像を探索します。<br /></div
+        ></label>
+      </div>
+      <h2>除外ワード</h2>
+      <div class="body_text">
+        <p>
+          「無関係な画像を除外する」がONのとき、次のワードを含む画像は保存しません。<br />
+          拡張子を指定することもできます。正規表現は"/"で囲って使用してください。
+        </p>
+        <textarea id="ng_words" rows="8" cols="30"></textarea><br />
+        Hint:
+        /\D\d{3}x\d{3}/は様々なサイトでサムネイルとして表示される、小さい画像にマッチする正規表現です。
+      </div>
+
+      <h2>ダウンロードフォルダ</h2>
+      <div class="body_text">
+        <p>
+          デフォルトのダウンロードフォルダからの相対パスで記述してください。
+          {title}はページタイトルに変換されます。
+        </p>
+        <textarea cols="30" rows="1" id="download_folder"></textarea>
+      </div>
+
+      <h2>タイムアウト時間</h2>
+      <div class="body_text">
+        <p>
+          この時間を過ぎても応答がなかった場合、そのダウンロードを中断します。(初期設定:15秒)
+        </p>
+        <input type="number" id="timeout" min="1" />秒
+      </div>
+    </div>
+    <script src="options.js"></script>
+  </body>
+</html>

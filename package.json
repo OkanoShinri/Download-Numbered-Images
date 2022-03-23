@@ -1,12 +1,13 @@
 {
   "name": "download-numbered-images",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "description": "An extension that downloads a batch of images from a website and numbers them consecutively.",
   "main": "manifest.json",
   "scripts": {
     "build": "web-ext build --overwrite-dest",
     "run": "web-ext run",
-    "lint": "web-ext lint "
+    "wlint": "web-ext lint",
+    "elint": "eslint src"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   },
   "homepage": "https://github.com/OkanoShinri/Download-Numbered-Images#readme",
   "devDependencies": {
+    "eslint": "^8.11.0",
     "web-ext": "^6.7.0"
   }
 }
