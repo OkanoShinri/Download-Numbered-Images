@@ -2,18 +2,28 @@ browser.runtime.onInstalled.addListener(initialize);
 browser.runtime.onMessage.addListener(catchMessage);
 
 //コンテキストメニューが表示されたとき
-browser.menus.onShown.addListener(() => {
+browser.menus.onShown.addListener((info) => {
+  let is_single_download_mode = false;
+  if (info.linkUrl || info.srcUrl) {
+    is_single_download_mode = true;
+  }
   //開いているタブにcontent.jsを走らせる
   browser.tabs
     .executeScript({ file: "/src/content_scripts/content.js" })
     .then(() => {
       browser.menus.update("download", {
-        visible: true,
+        visible: !is_single_download_mode,
+      });
+      browser.menus.update("single_download", {
+        visible: is_single_download_mode,
       });
       browser.menus.refresh();
     })
     .catch((e) => {
       browser.menus.update("download", {
+        visible: false,
+      });
+      browser.menus.update("single_download", {
         visible: false,
       });
       browser.menus.refresh();
@@ -42,6 +52,15 @@ browser.menus.onClicked.addListener((info, tab) => {
 
       break;
     }
+    case "single_download": {
+      browser.tabs.sendMessage(tab.id, {
+        command: "send_single_download_data",
+        link_url: info.linkUrl,
+        src_url: info.srcUrl,
+      });
+
+      break;
+    }
   }
 });
 
@@ -50,6 +69,11 @@ browser.menus.create({
   id: "download",
   title: "画像を一括ダウンロード",
   contexts: ["all"],
+});
+browser.menus.create({
+  id: "single_download",
+  title: "この画像をダウンロード",
+  contexts: ["image"],
 });
 
 //アドオンがインストールされたときに実行（初期化）

@@ -22,45 +22,46 @@
     }
 
     window.is_runnning = true;
-    browser.storage.local
-      .get()
-      .then((restoredSettings) => {
-        const config = {
-          is_serialized: restoredSettings.is_serialized,
-          rm_ngwords: restoredSettings.rm_ngwords,
-          legal_img_extentions: restoredSettings.img_extentions,
-          ng_words: restoredSettings.ng_words,
-          download_folder: restoredSettings.download_folder,
-          download_all: restoredSettings.download_all,
-          timeout: restoredSettings.timeout,
-        };
-        let is_select_mode = false;
+    if (message.command == "send_download_data") {
+      browser.storage.local
+        .get()
+        .then((restoredSettings) => {
+          const config = {
+            is_serialized: restoredSettings.is_serialized,
+            rm_ngwords: restoredSettings.rm_ngwords,
+            legal_img_extentions: restoredSettings.img_extentions,
+            ng_words: restoredSettings.ng_words,
+            download_folder: restoredSettings.download_folder,
+            download_all: restoredSettings.download_all,
+            timeout: restoredSettings.timeout,
+          };
+          let is_select_mode = false;
 
-        console.log("START");
-        if (config.download_all) {
-          console.log("フルダウンロードモード:ON");
-        }
-        addProgressBar();
+          console.log("START");
+          if (config.download_all) {
+            console.log("フルダウンロードモード:ON");
+          }
+          addProgressBar();
 
-        var selection = window.getSelection();
-        //documentが無ければframeを探す
-        if (selection.type !== "Range") {
-          let frame_elements = document.getElementsByTagName("frame");
-          for (let i = 0; i < frame_elements.length; i++) {
-            try {
-              let frame_document = frame_elements[i].contentDocument;
-              selection = frame_document.getSelection();
-              if (selection !== null && selection.type === "Range") {
-                break;
+          var selection = window.getSelection();
+          //documentが無ければframeを探す
+          if (selection.type !== "Range") {
+            let frame_elements = document.getElementsByTagName("frame");
+            for (let i = 0; i < frame_elements.length; i++) {
+              try {
+                let frame_document = frame_elements[i].contentDocument;
+                selection = frame_document.getSelection();
+                if (selection !== null && selection.type === "Range") {
+                  break;
+                }
+              } catch (error) {
+                console.error(error);
+                continue;
               }
-            } catch (error) {
-              console.error(error);
-              continue;
             }
           }
-        }
-        //iframeにも対応させたい
-        /*
+          //iframeにも対応させたい
+          /*
         if (selection.type !== "Range") {
           let iframe_elements = document.getElementsByTagName("iframe");
           for (let i = 0; i < iframe_elements.length; i++) {
@@ -81,75 +82,123 @@
         }
         */
 
-        var element_and_urls = new Array();
-        if (selection.type === "Range") {
-          is_select_mode = true;
-          element_and_urls = zipURLAndElementFromSelectArea(config, selection);
-        } else {
-          element_and_urls = zipURLAndElement(config);
-        }
+          var element_and_urls = new Array();
+          if (selection.type === "Range") {
+            is_select_mode = true;
+            element_and_urls = zipURLAndElementFromSelectArea(
+              config,
+              selection
+            );
+          } else {
+            element_and_urls = zipURLAndElement(config);
+          }
 
-        getValidURLs(element_and_urls, config)
-          .then((results) => {
-            let count = 0;
+          getValidURLs(element_and_urls, config)
+            .then((results) => {
+              let count = 0;
 
-            for (let i = 0; i < results.length; i++) {
-              const result = results[i];
-              if (result !== "") {
-                if (config.is_serialized) {
-                  let file_name = getFileName(
-                    result[0],
-                    result[1],
-                    true,
-                    count
-                  );
-                  download(result[0], file_name, config.download_folder);
+              for (let i = 0; i < results.length; i++) {
+                const result = results[i];
+                if (result !== "") {
+                  if (config.is_serialized) {
+                    let file_name = getFileName(
+                      result[0],
+                      result[1],
+                      true,
+                      count
+                    );
+                    download(result[0], file_name, config.download_folder);
+                  }
+                  count++;
                 }
-                count++;
               }
-            }
 
-            if (count === 0) {
-              let area = is_select_mode ? "選択範囲" : "このページ";
+              if (count === 0) {
+                let area = is_select_mode ? "選択範囲" : "このページ";
+                browser.runtime.sendMessage({
+                  command: "notice",
+                  text:
+                    area +
+                    "にはダウンロードできる画像がありませんでした\n\nオプション内の除外ワードも確認してください",
+                });
+              }
+              console.log("END");
+              removeProgressBar();
+              window.is_runnning = false;
+            })
+            .catch((e) => {
+              window.is_runnning = false;
+              console.error(`Failed : ${e.message}`);
               browser.runtime.sendMessage({
                 command: "notice",
-                text:
-                  area +
-                  "にはダウンロードできる画像がありませんでした\n\nオプション内の除外ワードも確認してください",
+                text: e.message,
               });
-            }
-            console.log("END");
-            removeProgressBar();
-            window.is_runnning = false;
-          })
-          .catch((e) => {
-            window.is_runnning = false;
-            console.error(`Failed : ${e.message}`);
-            browser.runtime.sendMessage({
-              command: "notice",
-              text: e.message,
-            });
-            for (let index = 0; index < element_and_urls.length; index++) {
-              const element = element_and_urls[index][1];
-              if (
-                element.style.outline == "blue dashed 2px" ||
-                element.style.outline == "green dashed 2px"
-              ) {
-                element.style.outline = "";
+              for (let index = 0; index < element_and_urls.length; index++) {
+                const element = element_and_urls[index][1];
+                if (
+                  element.style.outline == "blue dashed 2px" ||
+                  element.style.outline == "green dashed 2px"
+                ) {
+                  element.style.outline = "";
+                }
               }
-            }
-            removeProgressBar();
+              removeProgressBar();
+            });
+        })
+        .catch((e) => {
+          window.is_runnning = false;
+          console.error(`Failed : ${e.message}`);
+          browser.runtime.sendMessage({
+            command: "notice",
+            text: e.message,
           });
-      })
-      .catch((e) => {
-        window.is_runnning = false;
-        console.error(`Failed : ${e.message}`);
-        browser.runtime.sendMessage({
-          command: "notice",
-          text: e.message,
+          removeProgressBar();
         });
-        removeProgressBar();
-      });
+    } else if (message.command == "send_single_download_data") {
+      browser.storage.local
+        .get()
+        .then((restoredSettings) => {
+          const download_folder = restoredSettings.download_folder;
+          const timeout = restoredSettings.timeout;
+
+          let urls = new Array();
+
+          let link_url = getLargeURL(message.link_url);
+          urls.push(link_url);
+          let src_url = getLargeURL(message.src_url);
+          if (link_url !== src_url) {
+            urls.push(src_url);
+          }
+          getExtentionsFromUrl(urls, timeout)
+            .then((extentions) => {
+              if (extentions[0] !== "") {
+                let filename1 = getFileName(link_url, extentions[0], false, 0);
+                download(link_url, filename1, download_folder);
+              }
+              if (extentions.length > 1 && extentions[1] !== "") {
+                let filename2 = getFileName(src_url, extentions[1], false, 0);
+                download(src_url, filename2, download_folder);
+              }
+              window.is_runnning = false;
+            })
+            .catch((e) => {
+              window.is_runnning = false;
+              console.error(`Failed : ${e.message}`);
+              browser.runtime.sendMessage({
+                command: "notice",
+                text: e.message,
+              });
+            });
+        })
+        .catch((e) => {
+          window.is_runnning = false;
+          console.error(`Failed : ${e.message}`);
+          browser.runtime.sendMessage({
+            command: "notice",
+            text: e.message,
+          });
+        });
+    }
   });
 
   //エレメントとそこに含まれるURLをまとめたデータ形式を作る
@@ -637,5 +686,32 @@
     if (bar !== null) {
       bar.remove();
     }
+  }
+
+  async function getExtentionsFromUrl(urls, timeout_second) {
+    const Extentions = await Promise.all(
+      urls.map(async (url) => {
+        //タイムアウト実装
+        const abort_controller = new AbortController();
+        const timeout = window.setTimeout(() => {
+          abort_controller.abort();
+          console.log(`Connection to ${url} timed out.`);
+        }, Number(timeout_second) * 1000);
+        const fetch_result = await fetch(url, {
+          method: "HEAD",
+          signal: abort_controller.signal,
+        }).catch(() => new Response());
+        window.clearTimeout(timeout);
+
+        let content_type = fetch_result.headers.get("Content-Type");
+        for (let i = 0; i < img_content_type.length; i++) {
+          if (img_content_type[i] === content_type) {
+            return img_extentions[i];
+          }
+        }
+        return "";
+      })
+    );
+    return Extentions;
   }
 })();
